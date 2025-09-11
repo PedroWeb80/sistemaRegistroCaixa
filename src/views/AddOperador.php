@@ -31,4 +31,31 @@ $this->layout('__layout')
             <button class="  mt-3 btn btn-dark  ">Adicionar</button>
         </form>
     </fieldset>
+
+    <div class=" bg-custom rounded pb-3 p-2 mt-4">
+    <table class="rounded">
+        <thead class="">
+            <th scope="col">Id:</th>
+            <th scope="col">Operador:</th>
+            <th scope="col">Admin:</th>
+        </thead>
+        <tbody>
+
+            <?php if ($operadores): ?>
+                <?php foreach ($operadores as $operador): ?>
+                    <tr>
+                        <td><?= $operador->id ?></td>
+                        <td><?= $operador->nome; ?></td>
+                        <td><?= $operador->isadmin?'SIM':'NÃO'; ?></td>
+                    </tr>
+                <?php endforeach ?>
+            <?php else: ?>
+                <?= "<h2>Sem operador de saídas</h2>" ?>
+            <?php endif ?>
+
+
+
+        </tbody>
+    </table>
+</div>
 </div>

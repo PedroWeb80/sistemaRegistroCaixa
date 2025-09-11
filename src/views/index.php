@@ -65,7 +65,7 @@ $this->layout('__layout') ?>
     </form>
 </fieldset>
 
-<div class=" bg-custom rounded">
+<div class=" bg-custom rounded pb-3 p-2">
     <table class="rounded">
         <thead class="">
             <th scope="col">Id:</th>

@@ -3,10 +3,12 @@ $this->layout('__layout') ?>
 
 <fieldset class="mb-4 bg-custom pb-4 p-3 text-ligth rounded ">
     <legend class="text-light">Informações operador:</legend>
+    <?php if(isset($_SESSION['error'])):?>
     <div class="">
         <p class="text-warning"><?= $_SESSION['error'] ?></p>
         <?php $_SESSION['error'] = '' ?>
     </div>
+    <?php endif?>
     <div class="col-2 mt-4">
         <a href="<?= url()?>" class="btn btn-success">Novo Registro</a>
     </div>
@@ -65,7 +67,7 @@ $this->layout('__layout') ?>
     </form>
 </fieldset>
 
-<div class=" bg-custom rounded">
+<div class=" bg-custom rounded pb-3 p-2">
     <table class="rounded">
         <thead class="">
             <th scope="col">Id:</th>
