@@ -1,0 +1,35 @@
+.bg-custom {
+    background-color: #072d69;
+}
+
+
+
+ul, li{
+    list-style: none;
+   
+    
+}
+ul, li, a{
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+}
+
+
+table{
+    width: 100%;
+    background-color: #072d69;
+    
+    padding:5px;
+    padding: 5px;
+}
+table  th {
+    border-bottom:1px solid #888;
+    padding: 10px;
+    background-color: #1f55a5;
+}
+table, td{
+    border-bottom: 1px solid #888;
+    padding: 10px;
+}
+
