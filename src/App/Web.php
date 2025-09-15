@@ -23,7 +23,7 @@ class Web
         //echo "<h1>Páigina inicial...</h1>";
         $id = $_SESSION['operador_id'] ? $_SESSION['operador_id'] : '';
 
-        $registros = (new Registro())->find("operador_id = :uid", "uid={$id}")->order("id DESC")->fetch(true);
+        $registros = (new Registro())->find("operador_id = :uid", "uid={$id}")->order("id DESC")->limit(15)->fetch(true);
 
         $this->views->addData(['title' => "Registro de saídas"]);
 
@@ -44,9 +44,8 @@ class Web
 
         $registro = new Registro();
 
+        //testa se o campo de data está preenchido para poder criar um novo registro
         if ($data['criado']) {
-
-
 
             $registro->add(
                 (new Operador())->findById($operador_id),
@@ -78,7 +77,7 @@ class Web
 
     public function editRegister($data)
     {
-
+        //apresenta tela de edição de registro e adiçãop de saídas
         $id = $_SESSION['operador_id'] ? $_SESSION['operador_id'] : '';
 
         $registro = (new Registro())->find("operador_id = :uid AND criado = :criado", "uid={$id}&criado={$data['criado']}")->fetch();
@@ -95,6 +94,7 @@ class Web
     }
 
     public function addRegisterOut($data) {
+        //salva no banco de dados registro e saidas
         $registro = (new Registro())->findById($data['registro_id']);
         $registro->dinheiro = $this->convertToFloat( $data['dinheiro']);
         $registro->cartao = $this->convertToFloat( $data['cartao']);
@@ -129,6 +129,17 @@ class Web
         }
 
 
+    }
+    public function deleteRegisterOut($data) {
+        //deleta uma saida
+        $saida = (new Saida())->findById($data['saida_id']);
+        $registro_ativo = $saida->registro()->criado;
+        
+        if($saida->destroy()){
+            $_SESSION['error'] = "Saida deletada!";
+                header("Location: http://localhost/sistemacaixa/registro/editar/".$registro_ativo);
+                exit;
+        };
     }
     public function error($data)
     {

@@ -68,9 +68,10 @@ $this->layout('__layout') ?>
 </fieldset>
 
 <div class=" bg-custom rounded pb-3 p-2">
+    <?php $total = 0?>
     <table class="rounded">
         <thead class="">
-            <th scope="col">Id:</th>
+            
             <th scope="col">Descrição:</th>
             <th scope="col">Valor:</th>
             <th scope="col">Criado em:</th>
@@ -82,16 +83,17 @@ $this->layout('__layout') ?>
             <?php if ($saidas): ?>
                 <?php foreach ($saidas as $saida): ?>
                     <tr>
-                        <td><?= $saida->id ?></td>
+                        
                         <td><?= $saida->descricao; ?></td>
                         <td>R$ <?= str_replace(".", ",", $saida->valor) ?></td>
                         <td><?= date('d/m/Y', strtotime($saida->registro()->criado)) ?></td>
                         <td>
-                            <button class="btn btn-success" type="button">Editar</button>
-                            <button class="btn btn-danger" type="button">Excluir</button>
+                            
+                            <a href="<?=url("registro/deletar/{$saida->id}")?>" class="btn btn-danger" type="button">Excluir</a>
+                            
                         </td>
 
-                        </td>
+                         <?php $total += $saida->valor?>
                     </tr>
                 <?php endforeach ?>
             <?php else: ?>
@@ -101,5 +103,6 @@ $this->layout('__layout') ?>
 
 
         </tbody>
+         <h3 class="  rounded p-2 col-3 bg-primary"><?="Total R$".str_replace('.',',',$total)?></h3>
     </table>
 </div>

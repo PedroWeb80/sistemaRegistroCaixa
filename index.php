@@ -33,6 +33,7 @@ $router->get("/registro/editar/{criado}", "Web:editRegister");
  * addRegisterOUT
  */
 $router->post("/registro/editar","Web:addRegisterOut");
+$router->get("/registro/deletar/{saida_id}","Web:deleteRegisterOut");
 
 /****
  * LOGIN
@@ -60,6 +61,17 @@ $router->get("/","Admin:index");
 $router->get("/operador/adicionar","Admin:AddOperador");
 $router->post("/operador/adicionar","Admin:saveNewOperador");
 
+
+
+/****
+ * ADMIN
+ * filter
+ */
+$router->get("/registro/filtrar","Admin:filterRegisters");
+$router->post("/registro/filtrar","Admin:filterRegistersPost");
+
+$router->group("");
+$router->get("/unauthorized","Login:notIsAdmin");
 
 
 

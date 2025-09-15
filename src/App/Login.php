@@ -47,4 +47,8 @@ class Login
         session_destroy();
         header("Location:".url());
     }
+
+    public function notIsAdmin($data) {
+        echo $this->views->render('unauthorized',[]);
+    }
 }

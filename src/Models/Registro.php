@@ -21,5 +21,9 @@ class Registro extends DataLayer {
     public function operador() {
         return (new Operador)->findById($this->operador_id);
     }
+
+    public function saidas() {
+        return (new Saida())->find("registro_id=:uid", "uid={$this->id}")->fetch(true);
+    }
     
 }
