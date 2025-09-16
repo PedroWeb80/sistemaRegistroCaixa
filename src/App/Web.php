@@ -152,7 +152,11 @@ class Web
             header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro_ativo);
             exit;
         }
-        ;
+        else{
+            $_SESSION["error"] = $saida->fail->getMessage;
+            header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro_ativo);
+            exit;
+        }
     }
     public function error($data)
     {
