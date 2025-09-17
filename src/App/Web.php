@@ -41,10 +41,18 @@ class Web
         // var_dump($data);
         // die();
         $operador_id = $_SESSION['operador_log_id'] ? $_SESSION['operador_log_id'] : '';
-
+        $criado = $data['criado'];
         $registro = new Registro();
 
         //testa se o campo de data está preenchido para poder criar um novo registro
+        $registroExist = $registro->find('criado=:criado', "criado={$criado}")->fetch();
+        
+        if ($registroExist != null) {
+            $_SESSION['error'] = "você já possue um registro nessa neste dia ".date('d/m/Y', strtotime($data['criado']));
+            header('Location:' . url());
+            exit;
+        }
+
         if ($data['criado']) {
 
             $registro->add(
@@ -57,18 +65,18 @@ class Web
 
             if ($registro->save()) {
                 $_SESSION['error'] = 'Cadastro realizado com sucesso!';
-                header("Location: http://localhost/sistemacaixa/registro/editar/{$registro->criado}");
+                header("Location:" . url("registro/editar/{$registro->criado}"));
                 exit;
             } else {
                 $_SESSION['error'] = $registro->fail()->getMessage();
-                header('Location: http://localhost/sistemacaixa/');
+                header('Location:' . url());
                 exit;
             }
 
 
         } else {
             $_SESSION['error'] = "O campo data é obrigatório";
-            header('Location: http://localhost/sistemacaixa/');
+            header('Location:' . url());
             exit;
         }
 
@@ -97,11 +105,12 @@ class Web
     {
         //salva no banco de dados registro e saidas
         $registro = (new Registro())->findById($data['registro_id']);
-       
+
 
         if (empty($data['descricao']) && empty($data['valor'])) {
             $_SESSION['error'] = 'Campos não podem estar vazios';
-            header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro->criado);
+            header("Location:".url("registro/editar/".$registro->criado));
+            exit;
         } else {
             $saida = new Saida();
             $saida->add(
@@ -112,11 +121,11 @@ class Web
 
             if (!$saida->save()) {
                 $_SESSION['error'] = $saida->fail()->getMessage();
-                header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro->criado);
+                header("Location:".url("registro/editar/".$registro->criado));
                 exit;
             } else {
                 $_SESSION['error'] = "Saida cadastrada com sucesso!";
-                header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro->criado);
+                header("Location:".url("registro/editar/".$registro->criado));
                 exit;
             }
         }
@@ -138,7 +147,7 @@ class Web
         }
 
         $_SESSION['error'] = "Registro editado com sucesso!";
-        header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro->criado);
+        header("Location:".url("/registro/editar/".$registro->criado));
         exit;
     }
     public function deleteRegisterOut($data)
@@ -149,12 +158,11 @@ class Web
 
         if ($saida->destroy()) {
             $_SESSION['error'] = "Saida deletada!";
-            header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro_ativo);
+            header("Location:".url("registro/editar/".$registro_ativo));
             exit;
-        }
-        else{
-            $_SESSION["error"] = $saida->fail->getMessage;
-            header("Location: http://localhost/sistemacaixa/registro/editar/" . $registro_ativo);
+        } else {
+            $_SESSION["error"] = $saida->fail->getMessage();
+            header("Location:".url("registro/editar/".$registro_ativo));
             exit;
         }
     }

@@ -14,7 +14,7 @@ const DATA_LAYER_CONFIG = [
     ]
 ];
 
-const BASE_URL = "http://localhost/sistemacaixa";
+const BASE_URL = "http://192.168.0.6/sistemacaixa";
 
 function url($uri = null): string{
     if($uri) {

@@ -91,15 +91,15 @@ class Admin
 
             if ($operador->save()) {
                 $_SESSION['error'] = 'Cadastro realizado com sucesso!';
-                header('Location: http://localhost/sistemacaixa/admin/operador/adicionar');
+                header('Location:'.url('admin/operador/adicionar'));
             } else {
                 $_SESSION['error'] = $operador->fail()->getMessage();
-                header('Location: http://localhost/sistemacaixa/admin/operador/adicionar');
+                header('Location: '.url('admin/operador/adicionar'));
             }
 
         } else {
             $_SESSION['error'] = "Campos devem está preenchidos!";
-            header('Location: http://localhost/sistemacaixa/admin/operador/adicionar');
+            header('Location:'.url('admin/operador/adicionar'));
         }
 
     }
