@@ -24,9 +24,11 @@ $this->layout('__layout') ?>
                         class="form-control col" placeholder="valor em cartão">
 
                 </div>
+                <?php if(!isset($_SESSION['isadmin'])):?>
                 <div class="col-2 mt-4">
                     <button class="btn btn-dark">Novo Registro</button>
                 </div>
+                <?php endif?>
 
             </div>
             <!-- <div class="row mt-3">
@@ -85,9 +87,12 @@ $this->layout('__layout') ?>
                         <td>R$ <?= str_replace(".", ",", $registro->dinheiro) ?></td>
                         <td>R$ <?= str_replace(".", ",", $registro->cartao) ?></td>
                         <td><?= date('d/m/Y', strtotime($registro->criado)) ?></td>
-                        <td>
-                            <a href="<?=url('registro/editar/'.$registro->criado)?>" class="btn btn-success" type="button">Editar</button>
-                        </td>
+                        <?php if (!isset($_SESSION['isadmin'])): ?>
+                            <td>
+                                <a href="<?= url('registro/editar/' . $registro->criado) ?>" class="btn btn-success"
+                                    type="button">Editar</button>
+                            </td>
+                        <?php endif ?>
                     </tr>
                 <?php endforeach ?>
             <?php else: ?>

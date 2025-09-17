@@ -25,5 +25,10 @@ class Registro extends DataLayer {
     public function saidas() {
         return (new Saida())->find("registro_id=:uid", "uid={$this->id}")->fetch(true);
     }
+
+    public function saidasDescricao($descricao) {
+        
+        return (new Saida())->find("registro_id=:uid AND descricao LIKE :descricao ", "uid={$this->id}&descricao={$descricao}%")->fetch(true);
+    }
     
 }

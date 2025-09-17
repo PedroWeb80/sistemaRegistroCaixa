@@ -33,6 +33,7 @@ $router->get("/registro/editar/{criado}", "Web:editRegister");
  * addRegisterOUT
  */
 $router->post("/registro/editar","Web:addRegisterOut");
+$router->post("/registro/editar/valor", "Web:editValueRegister");
 $router->get("/registro/deletar/{saida_id}","Web:deleteRegisterOut");
 
 /****
@@ -52,6 +53,7 @@ $router->get("/sair","Login:singout");
  */
 $router->group("admin");
 $router->get("/","Admin:index");
+$router->post("/","Admin:checkCashRegister");
 
 
 /****

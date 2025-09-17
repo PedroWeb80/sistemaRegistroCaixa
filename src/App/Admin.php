@@ -14,7 +14,7 @@ class Admin
     public function __construct()
     {
         $this->views = new Engine(__DIR__ . "../../views");
-        if (!isset($_SESSION['operador']) || !isset($_SESSION['isadmin'])) {
+        if (!isset($_SESSION['operador_log']) || !isset($_SESSION['isadmin'])) {
             header('Location:' . url('unauthorized'));
             exit;
         }
@@ -25,8 +25,46 @@ class Admin
     public function index($data)
     {
         $this->views->addData(['title' => "área de administrador"]);
-        echo $this->views->render('dashboard', []);
+
+        $operadores = (new Operador())->find()->fetch(true);
+
+        echo $this->views->render('dashboard', [
+            'operadores' => $operadores,
+            'operador_active' => null
+        ]);
     }
+
+    public function checkCashRegister($data)
+    {
+        $operador_active = null;
+        $registro = null;
+        $operadorSelect = $data['operadorSelect'];
+        $register_data = $data['register_data'];
+
+        if ($data['operadorSelect'] && $register_data) {
+            $operador_active = (new Operador())->findById($data['operadorSelect']);
+            $registro = (new Registro())
+                ->find("operador_id=:uid AND criado = :data", "uid={$operador_active->id}&data={$register_data}")
+                ->fetch();
+            if (!isset($registro)) {
+                $_SESSION['error'] = 'sem registro neste dia';
+                header("Location:" . url('admin'));
+                exit;
+            }
+        } else {
+            $_SESSION['error'] = 'operador não selecionado';
+            header("Location:" . url('admin'));
+            exit;
+        }
+
+
+        $this->views->addData(['title' => "Conferir caixa"]);
+        echo $this->views->render('dashboard', [
+            'operador_active' => $operador_active,
+            'registro' => $registro,
+        ]);
+    }
+
 
     public function addOperador($data)
     {
@@ -71,26 +109,26 @@ class Admin
 
         $operadores = (new Operador())->find()->fetch(true);
 
-         $this->views->addData(['title' => "Filtrar saídas"]);
+        $this->views->addData(['title' => "Filtrar saídas"]);
         echo $this->views->render('filterRegisters', [
             'operadores' => isset($operadores) ? $operadores : [],
-            
+
         ]);
     }
     public function filterRegistersPost($data)
     {
-         $this->views->addData(['title' => "Filtrar saídas"]);
+        $this->views->addData(['title' => "Filtrar saídas"]);
 
         $registros = null;
         if ($data) {
             $inicio = $data['inicio'];
             $fim = $data['fim'];
-            $operador = $data['operador'];
-            
+            $operadorSelect = $data['operadorSelect'];
+
             $registros = (new Registro())
                 ->find(
                     "operador_id = :uid AND criado BETWEEN :inicio AND :fim",
-                    "uid={$operador}&inicio={$inicio}&fim={$fim}"
+                    "uid={$operadorSelect}&inicio={$inicio}&fim={$fim}"
                 )
                 ->fetch(true);
 
@@ -100,24 +138,49 @@ class Admin
             $_SESSION["error"] = "NÃO Á REGISTRO PARA ESSE INTERVALO DE DATAS";
 
         } else {
-            foreach ($registros as $registro) {
-                if ($registro->saidas()) {
-                    foreach ($registro->saidas() as $saida) {
-                        array_push($saidas, $saida);
+            if ($data['descricao_saida']) {
+                foreach ($registros as $registro) {
+                    $results = $registro->saidasDescricao(strtolower(trim($data['descricao_saida'])));
+                    if (isset($results)) {
+                        foreach ($results as $saida) {
+                            array_push($saidas, $saida);
+                        }
                     }
-                }
 
+                }
+            } else {
+                foreach ($registros as $registro) {
+                    if ($registro->saidas()) {
+                        foreach ($registro->saidas() as $saida) {
+                            array_push($saidas, $saida);
+                        }
+                    }
+
+                }
             }
         }
         $operadores = (new Operador())->find()->fetch(true);
+        
         echo $this->views->render('filterRegisters', [
             'operadores' => isset($operadores) ? $operadores : [],
             'saidas' => $saidas,
-            'operador' => (new Operador())->findById($data['operador'])
-            
+            'operadorSelect' => (new Operador())->findById($data['operadorSelect'])
+
         ]);
 
 
+    }
+
+    public function filterOutsDescription($data)
+    {
+
+        $operadores = (new Operador())->find()->fetch(true);
+
+        $this->views->addData(['title' => "Filtrar saídas"]);
+        echo $this->views->render('filterRegisters', [
+            'operadores' => isset($operadores) ? $operadores : [],
+
+        ]);
     }
 
 }

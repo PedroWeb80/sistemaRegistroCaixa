@@ -29,10 +29,6 @@
             <label for="">Final:</label>
             <input type="date" class="form-control" value="" name="fim" required />
         </div>
-        <div class="ms-3 ">
-            <label for="">Descrição:</label>
-            <input type="input" class="form-control" value="" name="descricao_saida"  />
-        </div>
 
         <div>
             <button class="mt-4 ms-3 btn btn-success  ">Pesquisar</button>
@@ -41,7 +37,7 @@
     </div>
 
     <div class=" bg-custom rounded pb-3 p-2">
-        <?php $total = 0 ?>
+        <?php $total = 0?>
         <table class="rounded">
             <thead class="">
 
@@ -62,7 +58,7 @@
                             <td>R$ <?= str_replace(".", ",", $saida->valor) ?></td>
                             <td><?= date('d/m/Y', strtotime($saida->registro()->criado)) ?></td>
                             <td><?= $operadorSelect->nome; ?></td>
-                            <?php $total += $saida->valor ?>
+                            <?php $total += $saida->valor?>
                             </td>
                         </tr>
                     <?php endforeach ?>
@@ -73,7 +69,7 @@
 
 
             </tbody>
-            <h3 class="  rounded p-2 col-3 bg-primary"><?= "Total R$" . str_replace('.', ',', $total) ?></h3>
+            <h3 class="  rounded p-2 col-3 bg-primary"><?="Total R$".str_replace('.',',',$total)?></h3>
         </table>
 
 </form>

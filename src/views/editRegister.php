@@ -3,34 +3,36 @@ $this->layout('__layout') ?>
 
 <fieldset class="mb-4 bg-custom pb-4 p-3 text-ligth rounded ">
     <legend class="text-light">Informações operador:</legend>
-    <?php if(isset($_SESSION['error'])):?>
-    <div class="">
-        <p class="text-warning"><?= $_SESSION['error'] ?></p>
-        <?php $_SESSION['error'] = '' ?>
-    </div>
-    <?php endif?>
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="">
+            <p class="text-warning"><?= $_SESSION['error'] ?></p>
+            <?php $_SESSION['error'] = '' ?>
+        </div>
+    <?php endif ?>
     <div class="col-2 mt-4">
-        <a href="<?= url()?>" class="btn btn-success">Novo Registro</a>
+        <a href="<?= url() ?>" class="btn btn-success">Novo Registro</a>
     </div>
-    <form action="<?= url('registro/editar') ?>" method="post">
-        <input type="hidden" name="registro_id" value="<?= $registro->id ?>">
-        <div class="col">
-            <div class="row">
-                <div class="col-6">
-                    <label for="ioperador">Nome Operador:</label>
-                    <input type="text" value="<?= $operador ? $operador : '' ?>" name="nome" id="ioperador" disabled
-                        class="form-control col" placeholder="Nome operador..">
-                </div>
 
-                <div class="col-2">
-                    <label for="idata">Data da Saída:</label>
-                    <input type="date" value="<?= $registro ? $registro->criado : '' ?>" name="criado" id="idata"
-                        class="form-control col">
 
-                </div>
+    <div class="col">
+        <div class="row">
+            <div class="col-6">
+                <label for="ioperador">Nome Operador:</label>
+                <input type="text" value="<?= $operador ? $operador : '' ?>" name="nome" id="ioperador" disabled
+                    class="form-control col" placeholder="Nome operador..">
+            </div>
 
+            <div class="col-2">
+                <label for="idata">Data da Saída:</label>
+                <input type="date" value="<?= $registro ? $registro->criado : '' ?>" name="criado" id="idata"
+                    class="form-control col">
 
             </div>
+
+
+        </div>
+        <form action="<?= url('registro/editar/valor') ?>" method="POST">
+            <input type="hidden" name="registro_id" value="<?= $registro->id ?>">
             <div class="row mt-3">
                 <div class="col-2 mr-5">
                     <label for="idinheiro">Valor em dinheiro:</label>
@@ -43,7 +45,14 @@ $this->layout('__layout') ?>
                     <input type="text" value="<?= $registro ? $registro->cartao : '' ?>" name="cartao" id="icartao"
                         class="form-control col" placeholder="valor em cartão">
                 </div>
+                <div>
+                    <button class="btn btn-dark">Salvar</button>
+                </div>
             </div>
+        </form>
+        <form action="<?= url('registro/editar') ?>" method="post">
+            <input type="hidden" name="registro_id" value="<?= $registro->id ?>">
+            
             <div class="row mt-5">
                 <label class="">
                     <h4>Adicionar registro de saída:</h4>
@@ -62,16 +71,16 @@ $this->layout('__layout') ?>
                     <button class="btn btn-dark">Registrar Saída</button>
                 </div>
             </div>
-        </div>
+    </div>
 
     </form>
 </fieldset>
 
 <div class=" bg-custom rounded pb-3 p-2">
-    <?php $total = 0?>
+    <?php $total = 0 ?>
     <table class="rounded">
         <thead class="">
-            
+
             <th scope="col">Descrição:</th>
             <th scope="col">Valor:</th>
             <th scope="col">Criado em:</th>
@@ -83,17 +92,18 @@ $this->layout('__layout') ?>
             <?php if ($saidas): ?>
                 <?php foreach ($saidas as $saida): ?>
                     <tr>
-                        
+
                         <td><?= $saida->descricao; ?></td>
                         <td>R$ <?= str_replace(".", ",", $saida->valor) ?></td>
                         <td><?= date('d/m/Y', strtotime($saida->registro()->criado)) ?></td>
                         <td>
-                            
-                            <a href="<?=url("registro/deletar/{$saida->id}")?>" class="btn btn-danger" type="button">Excluir</a>
-                            
+
+                            <a href="<?= url("registro/deletar/{$saida->id}") ?>" class="btn btn-danger"
+                                type="button">Excluir</a>
+
                         </td>
 
-                         <?php $total += $saida->valor?>
+                        <?php $total += $saida->valor ?>
                     </tr>
                 <?php endforeach ?>
             <?php else: ?>
@@ -103,6 +113,6 @@ $this->layout('__layout') ?>
 
 
         </tbody>
-         <h3 class="  rounded p-2 col-3 bg-primary"><?="Total R$".str_replace('.',',',$total)?></h3>
+        <h3 class="  rounded p-2 col-3 bg-primary"><?= "Total R$" . str_replace('.', ',', $total) ?></h3>
     </table>
 </div>
