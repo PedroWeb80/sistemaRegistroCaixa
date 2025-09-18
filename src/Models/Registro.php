@@ -10,10 +10,12 @@ class Registro extends DataLayer {
 
     }
 
-    public function add(Operador $operador, string $dinheiro, float $cartao, string $criado): Registro{
+    public function add(Operador $operador, string $dinheiro, float $cartao,float $pix,float $duplicata, string $criado): Registro{
         $this->operador_id = $operador->id;
         $this->dinheiro = $dinheiro;
         $this->cartao = $cartao;
+        $this->pix = $pix;
+        $this->duplicata = $duplicata;
         $this->criado = $criado;
         return $this;
     }

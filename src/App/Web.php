@@ -45,7 +45,7 @@ class Web
         $registro = new Registro();
 
         //testa se o campo de data está preenchido para poder criar um novo registro
-        $registroExist = $registro->find('criado=:criado', "criado={$criado}")->fetch();
+        $registroExist = $registro->find('operador_id=:uid AND criado=:criado', "criado={$criado}&uid={$operador_id}")->fetch();
         
         if ($registroExist != null) {
             $_SESSION['error'] = "você já possue um registro nessa neste dia ".date('d/m/Y', strtotime($data['criado']));
@@ -59,7 +59,9 @@ class Web
                 (new Operador())->findById($operador_id),
                 isset($data['dinheiro']) ? $this->convertToFloat($data['dinheiro']) : 0,
                 isset($data['cartao']) ? $this->convertToFloat($data['cartao']) : 0,
-                $data['criado'],
+                isset($data['pix']) ? $this->convertToFloat($data['pix']) : 0,
+                isset($data['duplicata']) ? $this->convertToFloat($data['duplicata']) : 0,
+                $data['criado']
             );
 
 
@@ -139,6 +141,8 @@ class Web
         $registro = (new Registro())->findById($data['registro_id']);
         $registro->dinheiro = $this->convertToFloat($data['dinheiro']);
         $registro->cartao = $this->convertToFloat($data['cartao']);
+        $registro->pix = $this->convertToFloat($data['pix']);
+        $registro->duplicata = $this->convertToFloat($data['duplicata']);
         // var_dump($data);
         // var_dump($registro);
 

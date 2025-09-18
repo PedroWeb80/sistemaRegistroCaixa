@@ -24,7 +24,7 @@ $this->layout('__layout') ?>
 
             <div class="col-2">
                 <label for="idata">Data da Saída:</label>
-                <input type="date" value="<?= $registro ? $registro->criado : '' ?>" name="criado" id="idata"
+                <input type="input" disabled value="<?= $registro ?  date('d/m/Y', strtotime($registro->criado)): '' ?>" name="criado" id="idata"
                     class="form-control col">
 
             </div>
@@ -45,6 +45,16 @@ $this->layout('__layout') ?>
                     <input type="text" value="<?= $registro ? $registro->cartao : '' ?>" name="cartao" id="icartao"
                         class="form-control col" placeholder="valor em cartão">
                 </div>
+                <div class="col-2">
+                    <label for="ipix">PIX:</label>
+                    <input type="text" value="<?= $registro ? $registro->pix : '' ?>" name="pix" id="ipix"
+                        class="form-control col" placeholder="valor em pix">
+                </div>
+                <div class="col-2">
+                    <label for="ipix">Duplicata:</label>
+                    <input type="text" value="<?= $registro ? $registro->duplicata : '' ?>" name="duplicata"
+                        id="iduplicata" class="form-control col" placeholder="valor em duplicata">
+                </div>
                 <div>
                     <button class="btn btn-dark">Salvar</button>
                 </div>
@@ -52,7 +62,7 @@ $this->layout('__layout') ?>
         </form>
         <form action="<?= url('registro/editar') ?>" method="post">
             <input type="hidden" name="registro_id" value="<?= $registro->id ?>">
-            
+
             <div class="row mt-5">
                 <label class="">
                     <h4>Adicionar registro de saída:</h4>
@@ -96,12 +106,15 @@ $this->layout('__layout') ?>
                         <td><?= $saida->descricao; ?></td>
                         <td>R$ <?= str_replace(".", ",", $saida->valor) ?></td>
                         <td><?= date('d/m/Y', strtotime($saida->registro()->criado)) ?></td>
-                        <td>
 
-                            <a href="<?= url("registro/deletar/{$saida->id}") ?>" class="btn btn-danger"
-                                type="button">Excluir</a>
+                        <?php if (date("Y-m-d") == $saida->registro()->criado): ?>
+                            <td>
 
-                        </td>
+                                <a href="<?= url("registro/deletar/{$saida->id}") ?>" class="btn btn-danger"
+                                    type="button">Excluir</a>
+
+                            </td>
+                        <?php endif ?>
 
                         <?php $total += $saida->valor ?>
                     </tr>
